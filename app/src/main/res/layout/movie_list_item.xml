@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content"
+                                             android:background="@color/listItemBackground">
+
+
+    <ImageView
+            app:srcCompat="@drawable/poster_placeholder" android:id="@+id/iv_movie_poster"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintDimensionRatio="H, 1:1.5"
+            android:adjustViewBounds="true"/>
+    <TextView
+            android:text="MovieTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" android:id="@+id/tv_movie_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline" app:layout_constraintTop_toTopOf="parent"
+            android:textSize="@dimen/movie_title_fontsize" android:padding="@dimen/list_item_padding"
+            android:textColor="@color/colorTextHeader" android:textStyle="bold"/>
+    <TextView
+            android:text="ReleaseDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" android:id="@+id/tv_release_date"
+            app:layout_constraintStart_toEndOf="@id/guideline" app:layout_constraintEnd_toStartOf="@id/tv_vote_average"
+            app:layout_constraintTop_toBottomOf="@id/tv_movie_title" android:padding="@dimen/list_item_padding"
+            android:drawableStart="@drawable/icon_calendar" android:gravity="center_vertical"
+            android:drawablePadding="8dp"/>
+    <TextView
+            android:text="VoteAverage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/tv_vote_average"
+            app:layout_constraintStart_toEndOf="@id/tv_release_date"
+            app:layout_constraintTop_toBottomOf="@id/tv_movie_title" app:layout_constraintEnd_toEndOf="parent"
+            android:padding="@dimen/list_item_padding"
+            android:gravity="center_vertical" android:drawableStart="@drawable/icon_star"
+            android:drawablePadding="8dp"/>
+    <android.support.constraint.Guideline
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/guideline" app:layout_constraintGuide_percent="0.25"/>
+
+</android.support.constraint.ConstraintLayout>

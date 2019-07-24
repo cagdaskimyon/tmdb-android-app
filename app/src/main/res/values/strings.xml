@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MobvenMovie</string>
+    <string name="tab_text_now_playing">NOW PLAYING</string>
+    <string name="tab_text_top_rated">TOP RATED</string>
+    <string name="tab_text_upcoming">UPCOMING</string>
+
+    <string name="activity_main_search_movie_hint">Search for a movie&#8230;</string>
+    <string name="activity_movie_detail_label">Details</string>
+    <string name="activity_movie_detail_overview_title">Overview</string>
+</resources>
