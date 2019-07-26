@@ -46,8 +46,19 @@ class MovieDetailActivity : AppCompatActivity() {
                 iv_favorite.setColorFilter(Color.parseColor("#FF0000"))
             }
         }
+
+        iv_navigate_back.setOnClickListener { onSupportNavigateUp() }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
+    }
+
+    override fun onBackPressed() {
+        finish()
+        super.onBackPressed()
+    }
 
     private fun getMovieDetail() {
 

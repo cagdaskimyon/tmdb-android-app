@@ -29,6 +29,7 @@ interface TmdbApiInterface {
 
     @GET("search/movie")
     fun searchMovie(
-        @Query("query") movieQuery: String
+        @Query("query") movieQuery: String,
+        @Query("page") page: Int
     ): Call<Movie>
 }

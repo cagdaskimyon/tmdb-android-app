@@ -31,11 +31,16 @@ class DataAdapter(private var dataList: List<Result>, private val context: Conte
 
         holder.movieId = dataModel.id
         holder.movieTitle.text = dataModel.title
-        holder.releaseDate.text = formatDate(dataModel.releaseDate!!)
+        holder.releaseDate.text = formatDate(dataModel.releaseDate)
         holder.voteAverage.text = dataModel.voteAverage.toString()
-        Glide.with(context)
-            .load(IMAGE_URL + dataModel.posterPath)
-            .into(holder.moviePoster)
+        if (dataModel.posterPath != null) {
+            Glide.with(context)
+                .load(IMAGE_URL + dataModel.posterPath)
+                .into(holder.moviePoster)
+        }
+        else {
+            holder.moviePoster.setImageResource(R.drawable.poster_placeholder)
+        }
     }
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {

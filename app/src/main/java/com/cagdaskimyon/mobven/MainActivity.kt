@@ -2,6 +2,7 @@ package com.cagdaskimyon.mobven
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
@@ -68,6 +69,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         et_search_movie.addTextChangedListener(object : TextWatcher {
+            lateinit var userQuery: Editable
+            val handler = Handler()
+            val runnable = Runnable {
+                run {
+                    if (userQuery.isNotBlank())
+                        delayedSearch(userQuery)
+                }
+            }
+
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 // TODO Auto-generated method stub
             }
@@ -78,12 +88,21 @@ class MainActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable) {
                 if (s.isNotBlank()) {
-                    movieSearchResults!!.searchMovie(s.toString())
-                    showResultList()
+                    userQuery = s
+
+                    handler.removeCallbacks(runnable)
+                    handler.postDelayed(runnable, 500)
                 }
                 else {
                     hideResultList()
                 }
+            }
+
+            fun delayedSearch(s: Editable) {
+                movieSearchResults!!.movieList.clear()
+                movieSearchResults!!.currentPage = 0
+                movieSearchResults!!.searchMovie(s.toString())
+                showResultList()
             }
         })
     }

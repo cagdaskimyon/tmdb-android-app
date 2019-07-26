@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_movie_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.zip.Inflater
 
 
 class MovieListFragment : Fragment() {
@@ -51,11 +53,13 @@ class MovieListFragment : Fragment() {
 
         view.rv_movie_list.layoutManager = LinearLayoutManager(context)
         view.rv_movie_list.adapter = DataAdapter(movieList, context!!)
+
+        /** Movie list item divider */
         val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         itemDecoration.setDrawable(ContextCompat.getDrawable(view.context, R.drawable.movie_list_item_divider)!!)
         view.rv_movie_list.addItemDecoration(itemDecoration)
 
-
+        /** Infinite scroll */
         view.rv_movie_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -65,7 +69,7 @@ class MovieListFragment : Fragment() {
                     isLoading = true
                     when (arguments?.getInt(ARG_SECTION_NUMBER)) {
                         1, 2, 3 -> getMovie()
-                        else -> searchMovie(movieQuery!!)
+                        null -> searchMovie(movieQuery!!)
                     }
                 }
             }
@@ -88,10 +92,12 @@ class MovieListFragment : Fragment() {
         call.enqueue(object : Callback<Movie> {
 
             override fun onResponse(call: Call<Movie>?, response: Response<Movie>?) {
-                if (currentPage < response!!.body()!!.totalPages!!)
-                    currentPage = response!!.body()!!.page!!
-                movieList.addAll(response!!.body()!!.results!!.toList())
-                rv_movie_list.adapter?.notifyDataSetChanged()
+                val queryResult = response?.body()!!
+
+                if (currentPage < queryResult.totalPages!!)
+                    currentPage = queryResult.page!!
+                movieList.addAll(queryResult.results!!.toList())
+                view?.rv_movie_list?.adapter?.notifyDataSetChanged()
                 isLoading = false
             }
 
@@ -104,14 +110,17 @@ class MovieListFragment : Fragment() {
 
     fun searchMovie(movieQuery: String) {
         this.movieQuery = movieQuery
-
-        val call: Call<Movie> = TmdbApiClient.getClient.searchMovie(movieQuery)
+        val call: Call<Movie> = TmdbApiClient.getClient.searchMovie(movieQuery, currentPage + 1)
         call.enqueue(object : Callback<Movie> {
 
             override fun onResponse(call: Call<Movie>?, response: Response<Movie>?) {
-                movieList.clear()
-                movieList.addAll(response!!.body()!!.results!!.toList())
-                rv_movie_list.adapter?.notifyDataSetChanged()
+                val queryResult = response?.body()!!
+
+                if (currentPage < queryResult.totalPages!!)
+                    currentPage = queryResult.page!!
+                movieList.addAll(queryResult.results!!.toList())
+                view?.rv_movie_list?.adapter?.notifyDataSetChanged()
+                isLoading = false
             }
 
             override fun onFailure(call: Call<Movie>?, t: Throwable?) {
